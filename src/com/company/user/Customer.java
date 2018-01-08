@@ -1,17 +1,18 @@
 package com.company.user;
 
+import com.company.fileservices.FileServices;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Customer extends User {
-    private static final AtomicInteger idGenerator = new AtomicInteger(100000);
-    private int customerID;
+    private int customerID=100000;
     private String address;
-    private String phone;
+    private int phone;
 
-    public Customer(int customerID, String firstName, String lastName, String title, String email, String address, String phone) {
+    public Customer(int customerID, String firstName, String lastName, String title, String address, int phone, String email) {
         super(firstName, lastName, title, email);
         if(customerID==0) {
-            this.customerID=idGenerator.getAndIncrement();
+            this.customerID = this.customerID + getNumberOfCustomers();
         }else{
             this.customerID=customerID;
         }
@@ -27,7 +28,7 @@ public class Customer extends User {
         return address;
     }
 
-    public String getPhone() {
+    public int getPhone() {
         return phone;
     }
 
@@ -35,8 +36,14 @@ public class Customer extends User {
         this.address = address;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(int phone) {
         this.phone = phone;
+    }
+
+    //This adds significant more traffic to reading files
+    private int getNumberOfCustomers(){
+        FileServices fs = new FileServices();
+        return fs.loadCustomers().size();
     }
 
     @Override

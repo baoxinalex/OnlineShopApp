@@ -25,7 +25,7 @@ public class Main {
         Product pear = new Fruit("pear",10,0.25,3);
 
 
-        Customer testCustomer4 = new Customer(0, "Test4","Test4","MR","fake4@email.com","fake address4","4124456");
+        Customer testCustomer4 = new Customer(0, "Test4","Test4","MR","fake address4",4124456,"fake4@email.com");
         FileServices fs = new FileServices();
         ArrayList<Customer> customers = fs.loadCustomers();
         customers.add(testCustomer4);
@@ -33,6 +33,8 @@ public class Main {
             System.out.println(customer.toString());
             System.out.println(customer.getCustomerID());
         }
+
+
 
 //        ArrayList<Customer> customers = fs.loadCustomers();
 //        customers.add(testCustomer1);
@@ -47,7 +49,7 @@ public class Main {
 //        System.out.println(apple.getDiscountedPrice());
 //        apple.setDiscountedPrice(0.2);
 //        System.out.println(apple.getDiscountedPrice());
-//        apple.setDiscountedPrice(0.0);
+//        apple.setDiscountedPrice(0);
 //        System.out.println(apple.getDiscountedPrice());
 
 

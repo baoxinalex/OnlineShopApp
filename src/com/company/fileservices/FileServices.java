@@ -1,5 +1,6 @@
 package com.company.fileservices;
 
+import com.company.cart.Order;
 import com.company.cart.Purchase;
 import com.company.products.Fruit;
 import com.company.products.Product;
@@ -13,29 +14,31 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.util.ArrayList;
 
 public class FileServices {
-    private String customerFileLocation = "C:\\Users\\baox\\Google Drive\\learning and training\\java (1)\\SimpleOnlineShopApp\\src\\com\\company\\resource\\customer.txt";
-    private File customerFile= new File(customerFileLocation);
+    private String commonFileLocation = System.getProperty("user.dir");
+    private String customerFileLocation = "\\src\\com\\company\\resource\\customer.txt";
+    private File customerFile= new File(commonFileLocation+customerFileLocation);
     private ArrayList<Customer> customers;
 
-    private String adminFileLocation = "C:\\Users\\baox\\Google Drive\\learning and training\\java (1)\\SimpleOnlineShopApp\\src\\com\\company\\resource\\admin.txt";
-    private File adminFile= new File(adminFileLocation);
+    private String adminFileLocation = "\\src\\com\\company\\resource\\admin.txt";
+    private File adminFile= new File(commonFileLocation+adminFileLocation);
 
 
-    private String fruitFileLocation = "C:\\Users\\baox\\Google Drive\\learning and training\\java (1)\\SimpleOnlineShopApp\\src\\com\\company\\resource\\fruit.txt";
-    private File fruitFile= new File(fruitFileLocation);
+    private String fruitFileLocation = "\\src\\com\\company\\resource\\fruit.txt";
+    private File fruitFile= new File(commonFileLocation+fruitFileLocation);
     private ArrayList<Fruit> fruits;
 
-
-    private String vegFileLocation = "C:\\Users\\baox\\Google Drive\\learning and training\\java (1)\\SimpleOnlineShopApp\\src\\com\\company\\resource\\vegtable.txt";
-    private File vegFile= new File(vegFileLocation);
+    private String vegFileLocation = "\\src\\com\\company\\resource\\vegetable.txt";
+    private File vegFile= new File(commonFileLocation+vegFileLocation);
     private ArrayList<Vegetable> vegetables;
 
-    private String purchaseFileLocation = "C:\\Users\\baox\\Google Drive\\learning and training\\java (1)\\SimpleOnlineShopApp\\src\\com\\company\\resource\\purchase_record.txt";
-    private File purchaseRecord= new File(purchaseFileLocation);
+    private String purchaseFileLocation = "\\src\\com\\company\\resource\\purchase_record.txt";
+    private File purchaseRecord= new File(commonFileLocation+purchaseFileLocation);
     private ArrayList<Purchase> purchases;
+    private ArrayList<Order> orders;
 
     public ArrayList<Customer> loadCustomers() {
 
@@ -52,11 +55,11 @@ public class FileServices {
                 String title = field[1];
                 String first_name = field[2];
                 String last_name = field[3];
-                String address = field[4];
+                String email = field[4];
                 String phone = field[5];
-                String email = field[6];
+                String address = field[6];
 
-                customers.add( new Customer(Integer.parseInt(customerID), first_name,last_name,title,address,phone,email));
+                customers.add( new Customer(Integer.parseInt(customerID), first_name,last_name,title,address,Integer.parseInt(phone),email));
             }
             br.close();
 
@@ -149,15 +152,16 @@ public class FileServices {
         return vegetables;
     }
 
-    public ArrayList<Product> loadProducts(){
+    private ArrayList<Product> loadProducts(){
         ArrayList<Product> products = new ArrayList<>();
         products.addAll(loadFruits());
         products.addAll(loadVegetables());
-        return new ArrayList<Product>();
+        return products;
     }
 
-    public ArrayList<Purchase> loadPurchase(){
+    public ArrayList<Order> loadPurchase(){
         purchases = new ArrayList<>();
+        orders = new ArrayList<>();
         if(!purchaseRecord.exists() || !purchaseRecord.canRead() || !purchaseRecord.isFile()){
             System.out.println("Unable to find readable file: "+purchaseRecord.getAbsolutePath());
         }
@@ -167,15 +171,17 @@ public class FileServices {
 
             while ((line=br.readLine()) != null){
                 String[] field = line.split(",");
-                String customerID = field[0];
-                String productName = field[1];
-                String quantity = field[2];
+                String orderID = field[0];
+                String customerID = field[1];
+                String productName = field[2];
+                String quantity = field[3];
 
                 for(Product product: loadProducts()){
                     if(product.getProductName().equals(productName)){
-                        purchases.add( new Purchase(Integer.parseInt(customerID), product, Integer.parseInt(quantity)));
+                        orders.add( new Order(Integer.parseInt(customerID), product, Integer.parseInt(quantity)));
                     }
                 }
+                //not complete yet
             }
             br.close();
 
@@ -183,7 +189,7 @@ public class FileServices {
             e.printStackTrace();
         }
 
-        return purchases;
+        return orders;
     }
 
     public void writeCustomer(){
@@ -232,7 +238,7 @@ public class FileServices {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(vegFile, false));
             for (Purchase purchase: purchases){
-                bw.write(purchase.getCustomerID()+","+purchase.getProductName()+","+purchase.getCustomerID());
+                bw.write(""); //not completed yet
                 bw.newLine();
             }
             bw.close();

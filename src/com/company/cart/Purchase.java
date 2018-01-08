@@ -1,33 +1,26 @@
 package com.company.cart;
 
-import com.company.products.Product;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+
 
 public class Purchase {
 
-    private static AtomicInteger purchaseIDGenerator = new AtomicInteger(10000);
+    private ArrayList<Order> orders;
+    private int purchaseID=10000;
 
-    private int customerID;
-    private Product product;
-    private int quantityPurchased;
-    private int purchaseID;
 
-    public Purchase(int customerID, Product product, int quantityPurchased) {
-        this.customerID = customerID;
-        this.product = product;
-        this.quantityPurchased = quantityPurchased;
-        this.purchaseID=purchaseIDGenerator.getAndIncrement();
+    //id is temperarily written in this way, it has to be reworked
+    public Purchase(int orderID, ArrayList<Order> orders){
+        if(orderID==0){
+            this.purchaseID++;
+        }
+        else{
+            this.purchaseID=purchaseID;
+        }
+        this.orders = orders;
     }
 
-    public int getCustomerID() {
-        return customerID;
-    }
-
-    public String getProductName() {
-        return this.product.getProductName();
-    }
-
-    public int getQuantityPurchased() {
-        return quantityPurchased;
+    public int getPurchaseID() {
+        return purchaseID;
     }
 }
