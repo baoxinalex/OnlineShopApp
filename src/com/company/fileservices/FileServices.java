@@ -1,7 +1,7 @@
 package com.company.fileservices;
 
+import com.company.cart.Item;
 import com.company.cart.Order;
-import com.company.cart.Purchase;
 import com.company.products.Fruit;
 import com.company.products.Product;
 import com.company.products.Vegetable;
@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class FileServices {
     private String commonFileLocation = System.getProperty("user.dir");
@@ -37,8 +38,8 @@ public class FileServices {
 
     private String purchaseFileLocation = "\\src\\com\\company\\resource\\purchase_record.txt";
     private File purchaseRecord= new File(commonFileLocation+purchaseFileLocation);
-    private ArrayList<Purchase> purchases;
     private ArrayList<Order> orders;
+    private ArrayList<Item> items;
 
     public ArrayList<Customer> loadCustomers() {
 
@@ -159,9 +160,9 @@ public class FileServices {
         return products;
     }
 
-    public ArrayList<Order> loadPurchase(){
-        purchases = new ArrayList<>();
+    public ArrayList<Item> loadOrder(){
         orders = new ArrayList<>();
+        items = new ArrayList<>();
         if(!purchaseRecord.exists() || !purchaseRecord.canRead() || !purchaseRecord.isFile()){
             System.out.println("Unable to find readable file: "+purchaseRecord.getAbsolutePath());
         }
@@ -178,10 +179,12 @@ public class FileServices {
 
                 for(Product product: loadProducts()){
                     if(product.getProductName().equals(productName)){
-                        orders.add( new Order(Integer.parseInt(customerID), product, Integer.parseInt(quantity)));
+                        items.add( new Item(product, Integer.parseInt(quantity)));
                     }
                 }
                 //not complete yet
+                ArrayList<Order> order = Collectors.
+
             }
             br.close();
 
@@ -189,7 +192,7 @@ public class FileServices {
             e.printStackTrace();
         }
 
-        return orders;
+        return items;
     }
 
     public void writeCustomer(){
@@ -237,7 +240,7 @@ public class FileServices {
     public void writePurchase(){
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(vegFile, false));
-            for (Purchase purchase: purchases){
+            for (Order order : orders){
                 bw.write(""); //not completed yet
                 bw.newLine();
             }
